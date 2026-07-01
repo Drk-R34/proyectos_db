@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +22,11 @@ import com.krakedev.proyectos.services.EmpleadoService;
 public class EmpleadoController {
 
 	private final EmpleadoService service;
-
+	
 	public EmpleadoController(EmpleadoService service) {
 		this.service = service;
 	}
-
+	
 	@PostMapping
 	public ResponseEntity<?> guardar(@RequestBody Empleado empleado) {
 		try {
@@ -36,7 +37,8 @@ public class EmpleadoController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
+	@PreAuthorize("hasRole('ADMIN', 'USER')")
 	@GetMapping
 	public ResponseEntity<?> listar() {
 
